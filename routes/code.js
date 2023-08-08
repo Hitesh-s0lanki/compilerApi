@@ -24,9 +24,9 @@ route.post('/run',async(req,res)=>{
         } else if(language === "js"){
             output = await executeJavascript(filename)
         }
-        res.send({filename,output})
+        res.json({filename,output})
     }catch(err){
-        res.send(err)
+        res.json(err)
     }
 
 })
