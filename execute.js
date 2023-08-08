@@ -32,5 +32,31 @@ const executePy = ( filepath ) =>{
     })
 }
 
-module.exports = { executeCpp ,executePy}
+
+const executeC = (filepath) => {
+    const jobId = path.basename(filepath).split('.')[0];
+    const outPath = path.join(outputPath, `${jobId}.out`);
+    return new Promise((resolve, reject) => {
+        exec(`gcc ${filepath} -o ${outPath} && ${outPath}`,
+            (error, stdout, stderr) => {
+                error && reject({ error, stderr });
+                stderr && reject(stderr);
+                resolve(stdout);
+            });
+    });
+};
+
+const executeJavascript = (filepath) => {
+    return new Promise((resolve, reject) => {
+        exec(`node ${filepath}`,
+            (error, stdout, stderr) => {
+                error && reject({ error, stderr });
+                stderr && reject(stderr);
+                resolve(stdout);
+            });
+    });
+};
+
+
+module.exports = { executeCpp ,executePy,executeC,executeJavascript}
 // `g++ ${filepath} -o ${outPath} && cd ${outputPath} && ./${jobId}.out`
