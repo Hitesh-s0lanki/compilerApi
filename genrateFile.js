@@ -16,4 +16,14 @@ const generateFile = async (File,format, code) =>{
     return filepath
 }
 
-module.exports = {generateFile}
+const deleteFile = async (filePath) =>{
+    fs.unlink(filePath, (err) => {
+        if (err) {
+            console.error(`Error deleting the file: ${err}`);
+        } else {
+            console.log(`File ${filePath} has been deleted successfully.`);
+        }
+    });
+}
+
+module.exports = {generateFile, deleteFile}

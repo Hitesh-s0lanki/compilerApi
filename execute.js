@@ -21,6 +21,7 @@ const executeCpp = ( filepath ) =>{
         })
     })
 }
+
 const executePy = ( filepath ) =>{
     return new Promise((resolve,reject)=>{
         exec(`python ${filepath}`,
@@ -57,6 +58,22 @@ const executeJavascript = (filepath) => {
     });
 };
 
+const executeJava = (filepath) => {
+    const jobId = path.basename(filepath).split(".")[0];
+    const outpath = filepath.split(jobId)[0]
 
-module.exports = { executeCpp ,executePy,executeC,executeJavascript}
-// `g++ ${filepath} -o ${outPath} && cd ${outputPath} && ./${jobId}.out`
+    return new Promise((resolve, reject) => {
+        exec(`javac ${filepath} && java -cp ${outpath} ${jobId}`, (error, stdout, stderr) => {
+            if (error) {
+                reject({ error, stderr });
+            } else if (stderr) {
+                reject(stderr);
+            } else {
+                resolve(stdout);
+            }
+        });
+    });
+}
+
+module.exports = { executeCpp ,executePy,executeC,executeJavascript, executeJava}
+
